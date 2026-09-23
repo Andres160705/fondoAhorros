@@ -20,15 +20,17 @@ export default function MisAhorros() {
         if (!error) setAhorros(data);
     };
     const addAhorro = async () => {
-        if (!usuario.trim() || !monto.trim()) return;
-        const { error } = await supabase.from('users').insert([{
-            usuario, monto: parseFloat(monto)
-        }]);
-        if (!error) {
-            setMonto('');
-            fetchAhorros();
-        }
-    };
+    if (!usuario.trim() || !monto.trim()) return;
+    const { data, error } = await supabase.from('users').insert([{
+        usuario, monto: parseFloat(monto)
+    }]);
+    if (error) {
+        console.log('ERROR:', error);
+        return;
+    }
+    setMonto('');
+    fetchAhorros();
+};
     const total = ahorros.reduce((sum, item) => sum + parseFloat(item.monto), 0);
     return (
         <View style={styles.container}>
